@@ -1,4 +1,4 @@
-#![cfg(not(target_arch = "wasm32"))]
+#![cfg(not(all(target_arch = "wasm32", not(target_vendor = "wasmer"))))]
 #![allow(unused)]
 use std::convert::Infallible;
 use std::future::Future;

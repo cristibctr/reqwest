@@ -1,5 +1,5 @@
 #![cfg(feature = "http3")]
-#![cfg(not(target_arch = "wasm32"))]
+#![cfg(not(all(target_arch = "wasm32", not(target_vendor = "wasmer"))))]
 
 mod support;
 

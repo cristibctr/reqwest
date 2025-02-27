@@ -1,4 +1,4 @@
-#![cfg(target_arch = "wasm32")]
+#![cfg(all(target_arch = "wasm32", not(target_vendor = "wasmer")))]
 use std::time::Duration;
 
 use wasm_bindgen::prelude::*;

@@ -1,4 +1,4 @@
-#![cfg_attr(target_arch = "wasm32", allow(unused))]
+#![cfg_attr(all(target_arch = "wasm32", not(target_vendor = "wasmer")), allow(unused))]
 use std::error::Error as StdError;
 use std::fmt;
 use std::io;
@@ -121,7 +121,7 @@ impl Error {
         matches!(self.inner.kind, Kind::Request)
     }
 
-    #[cfg(not(target_arch = "wasm32"))]
+    #[cfg(not(all(target_arch = "wasm32", not(target_vendor = "wasmer"))))]
     /// Returns true if the error is related to connect
     pub fn is_connect(&self) -> bool {
         let mut source = self.source();
@@ -169,7 +169,7 @@ impl Error {
 /// internal equivalents.
 ///
 /// Currently only is used for `tower::timeout::error::Elapsed`.
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(all(target_arch = "wasm32", not(target_vendor = "wasmer"))))]
 pub(crate) fn cast_to_internal_error(error: BoxError) -> BoxError {
     if error.is::<tower::timeout::error::Elapsed>() {
         Box::new(crate::error::TimedOut) as BoxError
@@ -229,14 +229,14 @@ impl StdError for Error {
     }
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", not(target_vendor = "wasmer")))]
 impl From<crate::error::Error> for wasm_bindgen::JsValue {
     fn from(err: Error) -> wasm_bindgen::JsValue {
         js_sys::Error::from(err).into()
     }
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", not(target_vendor = "wasmer")))]
 impl From<crate::error::Error> for js_sys::Error {
     fn from(err: Error) -> js_sys::Error {
         js_sys::Error::new(&format!("{err}"))

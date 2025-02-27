@@ -1,4 +1,4 @@
-#![cfg(not(target_arch = "wasm32"))]
+#![cfg(not(all(target_arch = "wasm32", not(target_vendor = "wasmer"))))]
 mod support;
 use http_body_util::BodyExt;
 use support::server;
